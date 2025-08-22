@@ -65,12 +65,11 @@ data = {
 }
 
 # 11. Send POST request to Mistral API with the diff prompt
-ai_response = requests.post(mistral_url, headers=mistral_headers, json=data)
+ai_response = requests.post(mistral_url, headers=mistral_headers, json=dat)
 
 # 12. Parse the response JSON and extract the model’s review text
 review_text = ai_response.json()["choices"][0]["message"]["content"]
 
-# 13. Build the URL to post a comment back into the PR (comments API is under "issues")
 comment_url = f"https://api.github.com/repos/{repo}/issues/{pr_number}/comments"
 
 # 14. Create the body of the comment with AI review text, include a 🤖 label

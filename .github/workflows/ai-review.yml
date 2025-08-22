@@ -1,0 +1,40 @@
+name: AI Pull Request Review (Mistral)
+
+# 1. Trigger this workflow whenever a pull request is opened or updated
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  ai-review:
+    # 2. Run this job on the latest Ubuntu virtual environment
+    runs-on: ubuntu-latest
+
+    steps:
+      # 3. Checkout the repo so the workflow can access PR files
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 4. Set up Python environment (we’ll use Python 3.10)
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      # 5. Install Python dependencies from requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # 6. Run our AI reviewer script
+      - name: Run Mistral AI Reviewer
+        env:
+          # GitHub token to authenticate API requests to post comments
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Your Mistral API key stored as a GitHub secret
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          # The repository name, automatically provided by GitHub Actions
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          # The pull request number that triggered the workflow
+          GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
+        # 7. Run the Python script that fetches PR diff, sends to Mistral, posts review
+        run: python ai_reviewer.py

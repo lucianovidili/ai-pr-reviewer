@@ -81,3 +81,6 @@ requests.post(comment_url, headers=headers, json=comment_body)
 
 # 16. Print a log message (useful for debugging in GitHub Actions logs)
 print("✅ AI review (Mistral) posted successfully!")
+
+# 17. Modifying a file
+print("Hello")

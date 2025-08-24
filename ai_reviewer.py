@@ -66,12 +66,21 @@ data = {
 }
 
 # 11. Send POST request to Mistral API with the diff prompt
-ai_response = requests.post(mistral_url, headers=mistral_headers, json=data)
+ai_response = requests.post(mistral_url, headers=mistral_headers, json=da)
 
-# If choices are missing, show error and stop
-if "choices" not in ai_response:
-    print("❌ Error: 'choices' not found in response.")
-    sys.exit(1)
+# Defensive printing to check the actual data
+print("DEBUG RESPONSE:", ai_response)
+
+if hasattr(ai_response, 'choices'):
+    try:
+        content = ai_response.choices[0].message.content
+        print("Response content:", content)
+    except Exception as ex:
+        print("⚠ Error accessing choices:", ex)
+        print("Full AI response:", ai_response)
+else:
+    print("❌ No 'choices' in response")
+    print("Full response object:", ai_response)
 
 # 12. Parse the response JSON and extract the model’s review text
 review_text = ai_response.json()["choices"][0]["message"]["content"]

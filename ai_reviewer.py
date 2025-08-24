@@ -66,7 +66,7 @@ data = {
 }
 
 # 11. Send POST request to Mistral API with the diff prompt
-ai_response = requests.post(mistral_url, headers=mistral_headers, json=data)
+ai_response = requests.post(mistral_url, headers=mistral_headers, json=ata)
 
 # Defensive printing to check the actual data
 print("DEBUG RESPONSE:", ai_response)
